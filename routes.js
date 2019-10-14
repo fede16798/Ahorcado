@@ -56,14 +56,18 @@ app.post('/usuarios', (req, res) => {
         if (esUserInvalido(nuevoUser)) {
             throw { status: 400, descripcion: 'el user posee un formato json invalido o faltan datos' }
         }
-        const usuarioBuscado = getUsuarioById(nuevoUser.id)
+        const usuarioBuscado = getUsuarioById(nuevoUser.id);
         const userNameExiste = getUsuarioByNombre(nuevoUser.nombre);
+        const userMailExiste = getUsuarioByMail(nuevoUser.mail);
 
         if (usuarioBuscado) {
             throw { status: 400, descripcion: 'ya existe un user con ese id' }
-        }
+        };
         if (userNameExiste){
             throw { status: 400, descripcion: 'ya existe un user con ese nombre' }
+        };
+        if (userMailExiste){
+            throw { status: 400, descripcion: 'ya existe un user con ese mail' }
         }
 
         agregarUser(nuevoUser)
@@ -79,7 +83,7 @@ app.delete('/usuarios/:id', (req, res) => {
 
     try {
         eliminarUsuarioById(req.params.id)
-        res.status(204).json('El usuario fue elimnado')
+        res.status(204), res.descripcion('El usuario fue elimnado')
     } catch (err) {
         res.status(err.status).json(err)
     }
@@ -89,7 +93,8 @@ app.delete('/usuarios/:id', (req, res) => {
 app.put('/usuarios/:id', (req, res) => {
     console.log('REPLACING: ' + req.url)
 
-    const nuevoUser = req.body
+    const nuevoUser = req.body;
+
     try {
         if (esUserInvalido(nuevoUser)) {
             throw { status: 400, descripcion: 'el usuario posee un formato json invalido o faltan datos' }
@@ -97,7 +102,6 @@ app.put('/usuarios/:id', (req, res) => {
         if (nuevoUser.id != req.params.id) {
             throw { status: 400, descripcion: 'no coinciden los ids enviados' }
         }
-
         reemplazarUsuarioById(nuevoUser)
         res.json(nuevoUser)
     } catch (err) {
@@ -108,7 +112,8 @@ app.put('/usuarios/:id', (req, res) => {
 function esUserInvalido(user) {
     const esquema = {
         id: Joi.number().integer().min(0),
-        nombre: Joi.string().alphanum().min(1).required()
+        nombre: Joi.string().alphanum().min(1).required(),
+        mail: Joi.string().email().required()
     }
     const { error } = Joi.validate(user, esquema);
     return error
@@ -123,12 +128,13 @@ function getAllUsuarios() {
 function getUsuarioById(id) {
     return usuarios.find(u => u.id == id)
 }
+
 function getUsuarioByNombre(nombre){
     return usuarios.find(u => u.nombre == nombre)
 }
 
-function getUsuarioById(id) {
-    return usuarios.find(u => u.id == id)
+function getUsuarioByMail(mail){
+    return usuarios.find(u => u.mail == mail)
 }
 
 function agregarUser(user) {
@@ -152,7 +158,7 @@ function reemplazarUsuarioById(user) {
     if (posBuscada == -1) {
         throw { status: 404, descripcion: 'user no encontrado' }
     }
-    usuarios.splice(posBuscada, 1, user)
+    usuarios.splice(posBuscada, 1, user) 
     return user
 }
 
