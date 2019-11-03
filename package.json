@@ -1,5 +1,5 @@
 {
-  "name": "blackjack-node",
+  "name": "ahorcado-node",
   "version": "1.0.0",
   "description": "",
   "main": "routes.js",
