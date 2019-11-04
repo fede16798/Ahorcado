@@ -102,20 +102,25 @@ function verificarLetrasEnPalabra (palabra, palabraOculta, letra) {
     console.log("Arranca funcion de verificar");
     palabra = palabra.toLowerCase();
     letra = letra.toLowerCase();
-    let nuevaPalabraOculta = new String (palabraOculta)
+    let arrayAux = [];
+    arrayAux = palabraOculta.split("");
     for (let index = 0; index < palabra.length; index++) {
         if (palabra[index] === letra) {
+            //en caso de true, reemplazo el string correspondiente
             console.log("letra acertada ");
-            palabraOculta.replaceAt(index , letra)
-           // palabraOculta.charAt(index) = letra;
+            arrayAux[index] = letra;
             console.log(palabraOculta);
+           
         } else { 
             console.log("la letra es erronea");
         }
     }
+
+    palabraOculta = arrayAux.join("");
+    console.log("la palabra oculta es " + palabraOculta)
+   
     return palabraOculta;
 }
-
 // function esLetraRegular(letra){
 //     let regEx = new RegExp("^[a-zA-Z\s]{1,1}$");
 //     return regEx.test(letra);
