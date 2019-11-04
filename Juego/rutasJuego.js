@@ -2,6 +2,8 @@ const express = require('express')
 const Joi = require('@hapi/joi')
 const _ = require('lodash')
 
+const juego = require['juego/juego.js'];
+
 const app = express()
 
 app.use(express.json())
@@ -9,7 +11,7 @@ app.set('json spaces', 4)
 
 // base de datos
 
-const partidas = []
+let partidas = []
 let ultimoId = 0
 const palabras= ["auto" , "moto" , "cuatriciclo" , "monopatin"];
 
@@ -76,12 +78,25 @@ app.post('/arriesgarLetra/:id', (req, res) => {
     try {
          if (esLetraInvalida(req.body)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
-        }
+        } 
 
         const partidaBuscada = getPartidaById(req.params.id);
 
+        if (partidaBuscada.vidas === 0) {
+            throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas'}
+        }
+        juego.esPartidaGanada(partidaBuscada)
+        if (partidaBuscada.gano){
+            throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
+        }
+
+        if (partidaBuscada.letrasArriesgadas.includes(letra)){
+            throw { status:400, descripcion: 'La letra ' + letra + ' ya fue ingresada anteriormente'}
+        } 
+
+       
         partidaBuscada.letrasArriesgadas.push(letra);
-        partidaBuscada.palabraOculta = verificarLetrasEnPalabra(partidaBuscada.palabra, partidaBuscada.palabraOculta, letra);
+        partidaBuscada.palabraOculta = juego.verificarLetrasEnPalabra(partidaBuscada, letra);
         
         res.status(201).json(letra)
     } catch (err) {
@@ -98,29 +113,6 @@ function esPartidaInvalida(partida) {
     return error
 }
 
-function verificarLetrasEnPalabra (palabra, palabraOculta, letra) {
-    console.log("Arranca funcion de verificar");
-    palabra = palabra.toLowerCase();
-    letra = letra.toLowerCase();
-    let arrayAux = [];
-    arrayAux = palabraOculta.split("");
-    for (let index = 0; index < palabra.length; index++) {
-        if (palabra[index] === letra) {
-            //en caso de true, reemplazo el string correspondiente
-            console.log("letra acertada ");
-            arrayAux[index] = letra;
-            console.log(palabraOculta);
-           
-        } else { 
-            console.log("la letra es erronea");
-        }
-    }
-
-    palabraOculta = arrayAux.join("");
-    console.log("la palabra oculta es " + palabraOculta)
-   
-    return palabraOculta;
-}
 // function esLetraRegular(letra){
 //     let regEx = new RegExp("^[a-zA-Z\s]{1,1}$");
 //     return regEx.test(letra);
@@ -150,14 +142,52 @@ function getPartidaByMail(mail){
 function agregarPartida(partida , email) {
     partida.id = ultimoId + 1;
     partida.palabra = "auto";
-    partida.palabraOculta = ocultarPalabra(partida.palabra);
+    partida.palabraOculta = juego.ocultarPalabra(partida.palabra);
     partida.mail = email;
     partida.vidas = 3;
     partida.letrasArriesgadas = [];
+    partida.gano = false;
     partidas.push(partida)
     ultimoId++
 }
 
+
+function seleccionarPalabra(){
+    let index = Math.floor(Math.random() * palabras.length);
+    let palabra = palabras[index].toLowerCase;
+    console.log("palabra " + palabra);
+    return palabra;
+}
+
+function esPartidaGanada(partida){
+    if(!partida.palabraOculta.includes("-")){
+        partida.gano = true;
+    }
+}
+
+function verificarLetrasEnPalabra (partida, letra) {
+    palabra = partida.palabra.toLowerCase();
+    letra = letra.toLowerCase();
+    palabraOculta = partida.palabraOculta;
+    let acertoLetra = false;
+    arrayAux = [];
+    arrayAux = palabraOculta.split("");
+    for (let index = 0; index < palabra.length; index++) {
+        if (palabra[index] === letra) {
+            //en caso de true, reemplazo el string correspondiente
+            arrayAux[index] = letra;
+            acertoLetra = true;
+        } else { 
+        }
+    }
+    //descuento la vida en caso de que la letra enviada no exista en la palabra de juego
+    if (!acertoLetra){
+        partida.vidas--;
+    }
+    palabraOculta = arrayAux.join("");
+   
+    return palabraOculta;
+}
 
 function ocultarPalabra(palabra){
     let num;
@@ -178,12 +208,7 @@ function ocultarPalabra(palabra){
     return palabraOcult;
 }
 
-function seleccionarPalabra(){
-    let index = Math.floor(Math.random() * palabras.length);
-    let palabra = palabras[index].toLowerCase;
-    console.log("palabra " + palabra);
-    return palabra;
-}
+
 const puerto = 5000;
 app.listen(puerto, () => {
     console.log(`servidor inicializado en puerto ${puerto}`);
