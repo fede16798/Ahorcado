@@ -24,7 +24,7 @@ let definicion = "";
 
 function seleccionarPalabra(palabras){
     let index = Math.floor(Math.random() * palabras.length);
-    this.palabra = palabras[index];
+    this.palabra = palabras[index].toLowerCase;
     console.log("palabra " + this.palabra);
 }
 

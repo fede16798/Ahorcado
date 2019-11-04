@@ -11,6 +11,7 @@ app.set('json spaces', 4)
 
 const partidas = []
 let ultimoId = 0
+const palabras= ["auto" , "moto" , "cuatriciclo" , "monopatin"];
 
 app.get('/partidas', (req, res) => {
     console.log('GETTING: ' + req.url)
@@ -35,11 +36,9 @@ app.get('/partidas/:id', (req, res) => {
         const partidaBuscada = getPartidaById(req.params.id)
 
         if (!partidaBuscada) {
-            throw { status: 404, descripcion: 'user no encontrado' }
+            throw { status: 404, descripcion: 'partida no encontrado' }
         }
-        res.json({partidaBuscada, 
-            palabra: "hola",
-            vidas: 2/5})
+        res.json(partidaBuscada)
     } catch (err) {
         res.status(err.status).json(err)
     }
@@ -52,19 +51,17 @@ app.post('/iniciarPartida', (req, res) => {
 
     try {
         if (esPartidaInvalida(nuevaPartida)) {
-            throw { status: 400, descripcion: 'el user posee un formato json invalido o faltan datos' }
+            throw { status: 400, descripcion: 'el partida posee un formato json invalido o faltan datos' }
         }
         const partidaBuscada = getPartidaById(nuevaPartida.id);
-        const userMailExiste = getPartidaByMail(nuevaPartida.mail);
+        const partidaMailExiste = getPartidaByMail(nuevaPartida.mail);
 
         if (partidaBuscada) {
-            throw { status: 400, descripcion: 'ya existe un user con ese id' }
-        };
-        if (userMailExiste){
-            throw { status: 400, descripcion: 'ya existe un user con ese mail' }
-        }
+            throw { status: 400, descripcion: 'ya existe un partida con ese id' }
+        }; 
+        
 
-        agregarPartida(nuevaPartida)
+        agregarPartida(nuevaPartida, req.body.mail);
 
         res.status(201).json(nuevaPartida)
     } catch (err) {
@@ -75,17 +72,16 @@ app.post('/iniciarPartida', (req, res) => {
 app.post('/arriesgarLetra/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
 
-    
-    const letra = req.body;
-
+    const letra = req.body.letra;
     try {
-         if (!esLetraRegular(letra)){
+         if (esLetraInvalida(req.body)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         }
 
-        const partidaBuscada = getPartidaById(partida.id);
-        
-        partidaBuscada.letras.push(letra);
+        const partidaBuscada = getPartidaById(req.params.id);
+
+        partidaBuscada.letrasArriesgadas.push(letra);
+        partidaBuscada.palabraOculta = verificarLetrasEnPalabra(partidaBuscada.palabra, partidaBuscada.palabraOculta, letra);
         
         res.status(201).json(letra)
     } catch (err) {
@@ -93,29 +89,46 @@ app.post('/arriesgarLetra/:id', (req, res) => {
     } 
 })
 
-function esPartidaInvalida(user) {
+function esPartidaInvalida(partida) {
     const esquema = {
         id: Joi.number().integer().min(0),
         mail: Joi.string().email().required(),
     }
-    const { error } = Joi.validate(user, esquema);
+    const { error } = Joi.validate(partida, esquema);
     return error
 }
 
-function esLetraRegular(letra){
-    let regEx = new RegExp("^[a-zA-Z\s]{1,1}$");
-    return regEx.test(letra);
+function verificarLetrasEnPalabra (palabra, palabraOculta, letra) {
+    console.log("Arranca funcion de verificar");
+    palabra = palabra.toLowerCase();
+    letra = letra.toLowerCase();
+    let nuevaPalabraOculta = new String (palabraOculta)
+    for (let index = 0; index < palabra.length; index++) {
+        if (palabra[index] === letra) {
+            console.log("letra acertada ");
+            palabraOculta.replaceAt(index , letra)
+           // palabraOculta.charAt(index) = letra;
+            console.log(palabraOculta);
+        } else { 
+            console.log("la letra es erronea");
+        }
+    }
+    return palabraOculta;
 }
 
-// function esLetraInvalida(game){
-//     const esquema = {
-//         id: Joi.number().integer().min(0),
-//         lett: Joi.Joi.string().required()
-//     }
-//     const { error } = Joi.validate(game,esquema);
-//     return error;
+// function esLetraRegular(letra){
+//     let regEx = new RegExp("^[a-zA-Z\s]{1,1}$");
+//     return regEx.test(letra);
 // }
 
+function esLetraInvalida(game){
+    const esquema = {
+        id: Joi.number().integer().min(0),
+        letra: Joi.string().regex(/^[a-zA-Z]*$/).min(1).max(1).required()
+    }
+    const { error } = Joi.validate(game,esquema);
+    return error;
+}
 
 function getAllPartidas() {
     return partidas
@@ -125,27 +138,47 @@ function getPartidaById(id) {
     return partidas.find(u => u.id == id)
 }
 
-
 function getPartidaByMail(mail){
     return partidas.find(u => u.mail == mail)
 }
 
-function agregarPartida(user) {
-    user.id = ultimoId + 1
-    partidas.push(user)
+function agregarPartida(partida , email) {
+    partida.id = ultimoId + 1;
+    partida.palabra = "auto";
+    partida.palabraOculta = ocultarPalabra(partida.palabra);
+    partida.mail = email;
+    partida.vidas = 3;
+    partida.letrasArriesgadas = [];
+    partidas.push(partida)
     ultimoId++
 }
 
-// function eliminarUsuarioById(id) {
-//     const posBuscada = partidas.findIndex(u => u.id == id)
-//     if (posBuscada != -1) {
-//         partidas.splice(posBuscada, 1)
-//     } else {
-//         throw { status: 404, descripcion: 'user no encontrado' }
-//     }
-// }
 
+function ocultarPalabra(palabra){
+    let num;
+    let palabraOcult = "";
+    //consigo cantida de guiones necesarios
+    for (let index = 0; index < palabra.length; index++) {
+        num = index;
+    }
+    num++;
+   // iguala la palabra oculta a la palabra elegida
+    for (let i = 0; i < num; i++){
+       palabraOcult = ("-" + palabraOcult)
+    }
 
+    console.log("cantidad de letras " + num );
+    console.log("palabra oculta " + palabraOcult);
+
+    return palabraOcult;
+}
+
+function seleccionarPalabra(){
+    let index = Math.floor(Math.random() * palabras.length);
+    let palabra = palabras[index].toLowerCase;
+    console.log("palabra " + palabra);
+    return palabra;
+}
 const puerto = 5000;
 app.listen(puerto, () => {
     console.log(`servidor inicializado en puerto ${puerto}`);
