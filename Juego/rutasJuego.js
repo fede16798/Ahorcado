@@ -66,10 +66,11 @@ app.post('/iniciarPartida', (req, res) => {
         agregarPartida(nuevaPartida, req.body.mail);
 
         partidaAux = generarEstadoPartida(nuevaPartida);
-        
-        res.status(201).json(partidaAux)
+        res.status(201).json(partidaAux);
+
     } catch (err) {
-        res.status(err.status).json(err)
+        console.log(err)
+        res.status(err.status).json(err);
     }
 })
 
@@ -122,7 +123,7 @@ function esPartidaInvalida(partida) {
         id: Joi.number().integer().min(0),
         mail: Joi.string().email().required(),
     }
-    const { error } = Joi.validate(partida, esquema);
+    const { error } = Joi.validate(partida, esquema)
     return error
 }
 
