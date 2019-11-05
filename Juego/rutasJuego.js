@@ -113,6 +113,7 @@ app.post('/arriesgarLetra/:id', (req, res) => {
 
 function generarEstadoPartida(partida){
     let partidaAMostrar = {};
+    partidaAMostrar.id = partida.id;
     partidaAMostrar.vidas = partida.vidas;
     partidaAMostrar.palabraOculta = partida.palabraOculta;
     partidaAMostrar.letrasArriesgadas = partida.letrasArriesgadas;
@@ -160,7 +161,7 @@ function agregarPartida(partida , email) {
     partida.palabra = seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 3;
+    partida.vidas = 1;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)
