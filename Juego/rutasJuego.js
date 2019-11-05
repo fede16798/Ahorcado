@@ -111,7 +111,7 @@ app.post('/arriesgarLetra/:id', (req, res) => {
     } 
 })
 
-function generarEstadoPartida(partida){
+function generarEstadoPartida(partida){ 
     let partidaAMostrar = {};
     partidaAMostrar.vidas = partida.vidas;
     partidaAMostrar.palabraOculta = partida.palabraOculta;
