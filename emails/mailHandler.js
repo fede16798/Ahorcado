@@ -23,6 +23,7 @@ exports.mandarMail = function(resultado,partida) {
   if(resultado){
     plantilla = 'TemplateGano'
   }
+  let usuario = obtenerUsuario(partida.mail);
   email.send({
     template: plantilla,
     message: {
@@ -30,13 +31,18 @@ exports.mandarMail = function(resultado,partida) {
       to: partida.mail,
     },
     locals: {
-      fname: "Jugador",
+      fname: usuario,
       word: partida.palabra,
       vidas: partida.vidas,
       palabraOculta: palabra.palabraOculta
     }
   
   }).then(() => console.log('email has been sent!'));
+}
+
+function obtenerUsuario(mail){
+let usuario = mail.split('@')[0];
+return usuario;
 }
 
 
