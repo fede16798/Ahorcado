@@ -1,7 +1,7 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
 const _ = require('lodash')
-const manejadorMail = require("../emails/mailHandler")
+const manejadorMail = require("../../emails/mailHandler")
 
 // const juego = require('juego/juego.js');
 
@@ -161,7 +161,7 @@ function agregarPartida(partida , email) {
     partida.palabra = seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 1;
+    partida.vidas = 3;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)
