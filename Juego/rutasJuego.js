@@ -13,7 +13,7 @@ app.set('json spaces', 4)
 
 let partidas = []
 let ultimoId = 0
-const palabras= ["auto" , "moto" , "cuatriciclo" , "monopatin"];
+const palabras= ["auto" , "moto", "odontologo", "medico", "profesor", "computadora", "cuatriciclo" , "monopatin"];
 
 app.get('/partidas', (req, res) => {
     console.log('GETTING: ' + req.url)
@@ -65,7 +65,9 @@ app.post('/iniciarPartida', (req, res) => {
 
         agregarPartida(nuevaPartida, req.body.mail);
 
-        res.status(201).json(nuevaPartida)
+        partidaAux = generarEstadoPartida(nuevaPartida);
+        
+        res.status(201).json(partidaAux)
     } catch (err) {
         res.status(err.status).json(err)
     }
@@ -83,9 +85,9 @@ app.post('/arriesgarLetra/:id', (req, res) => {
         const partidaBuscada = getPartidaById(req.params.id);
 
         if (partidaBuscada.vidas === 0) {
-            throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas'}
+            throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
         }
-        juego.esPartidaGanada(partidaBuscada)
+        esPartidaGanada(partidaBuscada)
         if (partidaBuscada.gano){
             throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
@@ -96,13 +98,24 @@ app.post('/arriesgarLetra/:id', (req, res) => {
 
        
         partidaBuscada.letrasArriesgadas.push(letra);
-        partidaBuscada.palabraOculta = juego.verificarLetrasEnPalabra(partidaBuscada, letra);
+        partidaBuscada.palabraOculta = verificarLetrasEnPalabra(partidaBuscada, letra);
         
-        res.status(201).json(letra)
+        partidaAux = generarEstadoPartida(partidaBuscada);
+
+        res.status(201).json(partidaAux)
     } catch (err) {
         res.status(err.status).json(err)
     } 
 })
+
+function generarEstadoPartida(partida){
+    let partidaAMostrar = {};
+    partidaAMostrar.vidas = partida.vidas;
+    partidaAMostrar.palabraOculta = partida.palabraOculta;
+    partidaAMostrar.letrasArriesgadas = partida.letrasArriesgadas;
+
+    return partidaAMostrar;
+}
 
 function esPartidaInvalida(partida) {
     const esquema = {
@@ -141,8 +154,8 @@ function getPartidaByMail(mail){
 
 function agregarPartida(partida , email) {
     partida.id = ultimoId + 1;
-    partida.palabra = "auto";
-    partida.palabraOculta = juego.ocultarPalabra(partida.palabra);
+    partida.palabra = seleccionarPalabra();
+    partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
     partida.vidas = 3;
     partida.letrasArriesgadas = [];
@@ -154,7 +167,7 @@ function agregarPartida(partida , email) {
 
 function seleccionarPalabra(){
     let index = Math.floor(Math.random() * palabras.length);
-    let palabra = palabras[index].toLowerCase;
+    let palabra = palabras[index].toLowerCase();
     console.log("palabra " + palabra);
     return palabra;
 }
