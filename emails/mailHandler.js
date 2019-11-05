@@ -24,7 +24,8 @@ exports.mandarMail = function(resultado,partida) {
     plantilla = 'TemplateGano'
   }
   let usuario = obtenerUsuario(partida.mail);
-  email.send({
+  try{
+    email.send({
     template: plantilla,
     message: {
       from: 'Ahorcado <ahorcadoort2019@gmail.com>',
@@ -34,10 +35,15 @@ exports.mandarMail = function(resultado,partida) {
       fname: usuario,
       word: partida.palabra,
       vidas: partida.vidas,
-      palabraOculta: palabra.palabraOculta
+      palabraOculta: palabra.palabraOculta,
+      id: partida.id
     }
   
   }).then(() => console.log('email has been sent!'));
+  }catch(err){
+    console.log(err);
+  }
+  
 }
 
 function obtenerUsuario(mail){
