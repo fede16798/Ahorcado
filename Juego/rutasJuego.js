@@ -81,7 +81,7 @@ app.post('/arriesgarLetra/:id', (req, res) => {
          if (esLetraInvalida(req.body)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
-
+let prueba;
         const partidaBuscada = getPartidaById(req.params.id);
 
         if (partidaBuscada.vidas === 0) {
