@@ -15,7 +15,8 @@ const palabras = [{"palabra":"Programacion","definicion":"Materia piola"},
 
 // ruta
 
-app.get("/api/palabraAleatoria", (req, res) => {
+//este GET tiene como funcion principal obtener una palabra aleatoria consumiendo la api
+app.get("/api/palabras", (req, res) => {
   console.log("GETTING: " + req.url);
   try {
     let result;
