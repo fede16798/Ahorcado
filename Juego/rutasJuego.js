@@ -1,8 +1,9 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
 const _ = require('lodash')
+const manejadorMail = require("../emails/mailHandler")
 
-const juego = require['juego/juego.js'];
+// const juego = require('juego/juego.js');
 
 const app = express()
 
@@ -82,14 +83,15 @@ app.post('/arriesgarLetra/:id', (req, res) => {
          if (esLetraInvalida(req.body)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
-let prueba;
         const partidaBuscada = getPartidaById(req.params.id);
 
         if (partidaBuscada.vidas === 0) {
+            manejadorMail.mandarMail(false,partidaBuscada);
             throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
         }
         esPartidaGanada(partidaBuscada)
         if (partidaBuscada.gano){
+            manejadorMail.mandarMail(true, partidaBuscada)
             throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
 
