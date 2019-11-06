@@ -2,13 +2,16 @@ const _ = require('lodash')
 const Joi = require('@hapi/joi')
 const router = require('express').Router()
 
-const baseURI = '/api/'
+const baseURI = '/api/palabra'
 
-app.get('/', (req, res) => {
-    console.log('GETTING: ' + req.url)
+router.get('/', (req, res) => {
+    console.log('GETTING: ' + baseURI + req.url)
     try {
-        console.log("Funciono")
+        res.json("Tu palabra es Auto")
     } catch (err) {
         res.status(err.status).json(err)
     }
 })
+
+
+module.exports = router
