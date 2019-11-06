@@ -47,8 +47,8 @@ app.get('/partidas/:id', (req, res) => {
     }
 })
 
-//este post tiene como funcion princiipal crear una partida 
-app.post('/partidas', (req, res) => {
+//este post es para iniciar una partida
+app.post('/partida', (req, res) => {
     console.log('POSTING: ' + req.url)
 
     const nuevaPartida = req.body
@@ -58,7 +58,6 @@ app.post('/partidas', (req, res) => {
             throw { status: 400, descripcion: 'el partida posee un formato json invalido o faltan datos' }
         }
         const partidaBuscada = getPartidaById(nuevaPartida.id);
-        const partidaMailExiste = getPartidaByMail(nuevaPartida.mail);
 
         if (partidaBuscada) {
             throw { status: 400, descripcion: 'ya existe un partida con ese id' }
@@ -76,9 +75,8 @@ app.post('/partidas', (req, res) => {
     }
 })
 
-//este post tiene como funcion principal arriesgar letras en la partida jugada, recibe un id para saber a que 
-// partida se hacer referencia
-app.post('/partidas/:id', (req, res) => {
+//este post es para arriesgar letra
+app.post('/partida/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
 
     const letra = req.body.letra;
@@ -133,10 +131,6 @@ function esPartidaInvalida(partida) {
     return error
 }
 
-// function esLetraRegular(letra){
-//     let regEx = new RegExp("^[a-zA-Z\s]{1,1}$");
-//     return regEx.test(letra);
-// }
 
 function esLetraInvalida(game){
     const esquema = {
@@ -155,9 +149,10 @@ function getPartidaById(id) {
     return partidas.find(u => u.id == id)
 }
 
+
 function agregarPartida(partida , email) {
     partida.id = ultimoId + 1;
-    partida.palabra = seleccionarPalabraAzarosa();
+    partida.palabra = seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
     partida.vidas = 1;
@@ -167,7 +162,8 @@ function agregarPartida(partida , email) {
     ultimoId++
 }
 
-function seleccionarPalabraAzarosa(){
+
+function seleccionarPalabra(){
     let index = Math.floor(Math.random() * palabras.length);
     let palabra = palabras[index].toLowerCase();
     console.log("palabra " + palabra);
@@ -180,7 +176,7 @@ function esPartidaGanada(partida){
     }
 }
 
-function verificarLetrasEnPalabra(partida, letra) {
+function verificarLetrasEnPalabra (partida, letra) {
     palabra = partida.palabra.toLowerCase();
     letra = letra.toLowerCase();
     palabraOculta = partida.palabraOculta;
@@ -222,6 +218,7 @@ function ocultarPalabra(palabra){
 
     return palabraOcult;
 }
+
 
 const puerto = 5000;
 app.listen(puerto, () => {
