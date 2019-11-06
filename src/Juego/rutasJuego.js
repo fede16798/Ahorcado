@@ -1,7 +1,7 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
 const _ = require('lodash')
-const manejadorMail = require("../../emails/mailHandler")
+const manejadorMail = require("../emails/mailHandler")
 
 // const juego = require('juego/juego.js');
 
@@ -16,7 +16,7 @@ let partidas = []
 let ultimoId = 0
 const palabras= ["auto" , "moto", "odontologo", "medico", "profesor", "computadora", "cuatriciclo" , "monopatin"];
 
-app.get('/partidas', (req, res) => {
+app.get('/api/partidas', (req, res) => {
     console.log('GETTING: ' + req.url)
     try {
         let result
@@ -33,7 +33,7 @@ app.get('/partidas', (req, res) => {
     }
 })
 
-app.get('/partidas/:id', (req, res) => {
+app.get('/api/partida/:id', (req, res) => {
     console.log('GETTING: ' + req.url)
     try {
         const partidaBuscada = getPartidaById(req.params.id)
@@ -48,7 +48,7 @@ app.get('/partidas/:id', (req, res) => {
 })
 
 //este post es para iniciar una partida
-app.post('/partida', (req, res) => {
+app.post('/api/partida', (req, res) => {
     console.log('POSTING: ' + req.url)
 
     const nuevaPartida = req.body
@@ -76,7 +76,7 @@ app.post('/partida', (req, res) => {
 })
 
 //este post es para arriesgar letra
-app.post('/partida/:id', (req, res) => {
+app.post('/api/partida/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
 
     const letra = req.body.letra;
@@ -155,7 +155,7 @@ function agregarPartida(partida , email) {
     partida.palabra = seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 3;
+    partida.vidas = 1;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)
