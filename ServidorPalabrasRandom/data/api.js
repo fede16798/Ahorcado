@@ -34,7 +34,15 @@ function getPalabraAleatoria(){
   return palabras[Math.floor(Math.random()*palabras.length)]
 }
 
+
+
+
+
 const puerto = 8080;
 app.listen(puerto, () => {
   console.log(`servidor inicializado en puerto ${puerto}`);
 });
+
+module.exports = {
+  getPalabraAleatoria,
+}

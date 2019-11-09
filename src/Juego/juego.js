@@ -1,3 +1,75 @@
+
+function esPartidaGanada(partida){
+    if(!partida.palabraOculta.includes("-")){
+        partida.gano = true;
+    }
+}
+
+function verificarLetrasEnPalabra (partida, letra) {
+    palabra = partida.palabra.toLowerCase();
+    letra = letra.toLowerCase();
+    palabraOculta = partida.palabraOculta;
+    let acertoLetra = false;
+    arrayAux = [];
+    arrayAux = palabraOculta.split("");
+    for (let index = 0; index < palabra.length; index++) {
+        if (palabra[index] === letra) {
+            //en caso de true, reemplazo el string correspondiente
+            arrayAux[index] = letra;
+            acertoLetra = true;
+        } else { 
+        }
+    }
+    //descuento la vida en caso de que la letra enviada no exista en la palabra de juego
+    if (!acertoLetra){
+        partida.vidas--;
+    }
+    palabraOculta = arrayAux.join("");
+   
+    return palabraOculta;
+}
+
+function ocultarPalabra(palabra){
+    let num;
+    let palabraOcult = "";
+    //consigo cantida de guiones necesarios
+    for (let index = 0; index < palabra.length; index++) {
+        num = index;
+    }
+    num++;
+   // iguala la palabra oculta a la palabra elegida
+    for (let i = 0; i < num; i++){
+       palabraOcult = ("-" + palabraOcult)
+    }
+
+    console.log("cantidad de letras " + num );
+    console.log("palabra oculta " + palabraOcult);
+
+    return palabraOcult;
+}
+
+
+
+module.exports = {
+    esPartidaGanada,
+    verificarLetrasEnPalabra,
+    ocultarPalabra
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // // const request = require('request');
 
 
@@ -111,59 +183,4 @@
 // ocu = verificarLetrasEnPalabra(pa , ocu , "o");
 // ocu = verificarLetrasEnPalabra(pa , ocu , "l");
 // ocu = verificarLetrasEnPalabra(pa , ocu , "a");
-function esPartidaGanada(partida){
-    if(!partida.palabraOculta.includes("-")){
-        partida.gano = true;
-    }
-}
 
-function verificarLetrasEnPalabra (partida, letra) {
-    palabra = partida.palabra.toLowerCase();
-    letra = letra.toLowerCase();
-    palabraOculta = partida.palabraOculta;
-    let acertoLetra = false;
-    arrayAux = [];
-    arrayAux = palabraOculta.split("");
-    for (let index = 0; index < palabra.length; index++) {
-        if (palabra[index] === letra) {
-            //en caso de true, reemplazo el string correspondiente
-            arrayAux[index] = letra;
-            acertoLetra = true;
-        } else { 
-        }
-    }
-    //descuento la vida en caso de que la letra enviada no exista en la palabra de juego
-    if (!acertoLetra){
-        partida.vidas--;
-    }
-    palabraOculta = arrayAux.join("");
-   
-    return palabraOculta;
-}
-
-function ocultarPalabra(palabra){
-    let num;
-    let palabraOcult = "";
-    //consigo cantida de guiones necesarios
-    for (let index = 0; index < palabra.length; index++) {
-        num = index;
-    }
-    num++;
-   // iguala la palabra oculta a la palabra elegida
-    for (let i = 0; i < num; i++){
-       palabraOcult = ("-" + palabraOcult)
-    }
-
-    console.log("cantidad de letras " + num );
-    console.log("palabra oculta " + palabraOcult);
-
-    return palabraOcult;
-}
-
-
-
-module.exports = {
-    esPartidaGanada,
-    verificarLetrasEnPalabra,
-    ocultarPalabra
-}

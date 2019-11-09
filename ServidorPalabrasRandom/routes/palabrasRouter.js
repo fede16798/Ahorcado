@@ -7,7 +7,7 @@ const baseURI = '/api/palabra'
 router.get('/', (req, res) => {
     console.log('GETTING: ' + baseURI + req.url)
     try {
-        res.json("Tu palabra es Auto")
+        res.json("Aca te muestra una palabra" );
     } catch (err) {
         res.status(err.status).json(err)
     }
