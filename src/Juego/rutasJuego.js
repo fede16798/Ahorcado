@@ -75,15 +75,15 @@ app.post('/api/partida', (req, res) => {
     }
 })
 
-//este post es para arriesgar letra
+//este POST es para arriesgar letra. El JSON tiene formato "letra":"*LETRA*"
 app.post('/api/partida/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
 
     const letra = req.body.letra;
     try {
-         if (esLetraInvalida(req.body)){
+         if (esLetraInvalida(req.body))
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
-        } 
+        
         const partidaBuscada = getPartidaById(req.params.id);
 
         if (partidaBuscada.vidas === 0) {
@@ -155,7 +155,7 @@ function agregarPartida(partida , email) {
     partida.palabra = seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 1;
+    partida.vidas = 3;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)

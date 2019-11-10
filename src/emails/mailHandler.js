@@ -19,14 +19,14 @@ const email = new Email({
 });
 
 exports.mandarMail = function(resultado,partida) {
-  let plantilla = "TemplatePerdio";
+  //let plantilla = 'templateperdio';
   if(resultado){
-    plantilla = 'TemplateGano'
+    plantilla = 'templategano'
   }
   let usuario = obtenerUsuario(partida.mail);
-  try{
+ 
     email.send({
-    template: plantilla,
+    template: "bye",
     message: {
       from: 'Ahorcado <ahorcadoort2019@gmail.com>',
       to: partida.mail,
@@ -39,11 +39,7 @@ exports.mandarMail = function(resultado,partida) {
       id: partida.id
     }
   
-  }).then(() => console.log('email has been sent!'));
-  }catch(err){
-    console.log(err);
-  }
-  
+  }).then(() => console.log('email has been sent!')).catch(e => console.error(`No se envio el mail: ${e}`)); 
 }
 
 function obtenerUsuario(mail){
