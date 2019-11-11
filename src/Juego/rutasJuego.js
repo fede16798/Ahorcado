@@ -102,6 +102,7 @@ app.post('/api/partida/:id', (req, res) => {
 
        
         partidaBuscada.letrasArriesgadas.push(letra);
+        console.log("llegue a verificar letra en palabra")
         partidaBuscada.palabraOculta = verificarLetrasEnPalabra(partidaBuscada, letra);
         
         partidaAux = generarEstadoPartida(partidaBuscada);

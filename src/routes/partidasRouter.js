@@ -54,11 +54,12 @@ router.post('/', (req, res) => {
 router.post('/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
     const letra = req.body.letra;
+    const id = req.params.id
     try {
-         if (juego.esLetraInvalida(req.body)){
+         if (juego.esLetraInvalida(letra)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
-        const partidaBuscada = partida.getPartidaById(req.params.id);
+        const partidaBuscada = partida.getPartidaById(id);
     
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
