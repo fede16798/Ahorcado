@@ -78,10 +78,13 @@ app.post('/api/partida', (req, res) => {
 //este POST es para arriesgar letra. El JSON tiene formato "letra":"*LETRA*"
 app.post('/api/partida/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
-
+    const arriesga ={
+        id=req.params.id,
+        letra = req.body.letra
+    }
     const letra = req.body.letra;
     try {
-         if (esLetraInvalida(req.body))
+         if (esLetraInvalida(arriesga))
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         
         const partidaBuscada = getPartidaById(req.params.id);
@@ -96,6 +99,7 @@ app.post('/api/partida/:id', (req, res) => {
             throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
 
+        console.log("Legue hasta verifica letras arriesgadas")
         if (partidaBuscada.letrasArriesgadas.includes(letra)){
             throw { status:400, descripcion: 'La letra ' + letra + ' ya fue ingresada anteriormente'}
         } 

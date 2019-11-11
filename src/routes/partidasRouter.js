@@ -55,8 +55,13 @@ router.post('/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
     const letra = req.body.letra;
     const id = req.params.id
+    // ACA
+    const arriesga ={
+        id: req.params.id,
+        letra : req.body.letra
+    }
     try {
-         if (juego.esLetraInvalida(letra)){
+         if (juego.esLetraInvalida(arriesga)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
         const partidaBuscada = partida.getPartidaById(id);
@@ -73,11 +78,12 @@ router.post('/:id', (req, res) => {
             throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
 
-        if (partidaBuscada.getLetrasArriesgadas().includes(letra)){
+        if (partidaBuscada.letrasArriesgadas.includes(letra)){
             throw { status:400, descripcion: 'La letra ' + letra + ' ya fue ingresada anteriormente'}
         } 
        
-        partidaBuscada.partida.agregarLetraArriesgada(letra);
+        partidaBuscada.letrasArriesgadas.push(letra);
+        
         partidaBuscada.palabraOculta = partida.verificarLetrasEnPalabra(partidaBuscada, letra);
         
         partidaAux = partida.generarEstadoPartida(partidaBuscada)
