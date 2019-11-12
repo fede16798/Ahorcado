@@ -79,8 +79,8 @@ app.post('/api/partida', (req, res) => {
 app.post('/api/partida/:id', (req, res) => {
     console.log('POSTING: arriesgando letra en la partida ' + req.url);
     const arriesga ={
-        id=req.params.id,
-        letra = req.body.letra
+        id: req.params.id,
+        letra: req.body.letra
     }
     const letra = req.body.letra;
     try {
