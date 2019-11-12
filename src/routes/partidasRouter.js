@@ -68,7 +68,7 @@ router.post('/:id', (req, res) => {
     
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
-            partida.notificarResultado(falso, partidaBuscada);
+            partida.notificarResultado(false, partidaBuscada);
             throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
         }
         partida.esPartidaGanada(partidaBuscada)

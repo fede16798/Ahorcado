@@ -14,7 +14,7 @@ function agregarPartida(partida , email) {
     partida.palabra = palabrasDAO.getPalabrasDAO().seleccionarPalabra();
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 3;
+    partida.vidas = 1;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)

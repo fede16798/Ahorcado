@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const Email = require('email-templates');
-
+const path = require('path');
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -19,14 +19,14 @@ const email = new Email({
 });
 
 exports.mandarMail = function(resultado,partida) {
-  //let plantilla = 'templateperdio';
+  let plantilla = 'TemplatePerdio';
   if(resultado){
-    plantilla = 'templategano'
+    plantilla = 'TemplateGano';
   }
   let usuario = obtenerUsuario(partida.mail);
  
     email.send({
-    template: "bye",
+    template: path.join(__dirname, plantilla),
     message: {
       from: 'Ahorcado <ahorcadoort2019@gmail.com>',
       to: partida.mail,
