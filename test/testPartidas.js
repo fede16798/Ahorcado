@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 const Joi = require('@hapi/joi')
 const cli = require('./client')
-
-// VALIDACIONES
+const parti = require('../src/Partida/partida.js');
+//VALIDACIONES
 
 function validarPartida(partida) {
     const partidaSchema = {
@@ -35,10 +35,11 @@ async function testPostWithBody() {
 }
 
 async function testPostLetraWithBody() {
+ 
     let result = false
     try {
         const partida = await cli.arriesgarLetra({
-            letra: 'o',
+            letra: 'o'//obtenerLetraAleatoria(),
         })
         validarPartida(partida)
         console.log("letra arriesgada")
@@ -48,6 +49,7 @@ async function testPostLetraWithBody() {
     }
     return result
 }
+
 async function testPostWithoutBody() {
     let result = false
     try {
@@ -64,8 +66,11 @@ async function testPostWithoutBody() {
     return result
 }
 
+let games = parti.getPartidaById(0);
+
 async function main() {
-    let exitos = 0
+    let exitos = 0;
+    let cont = 0;
     const tests = [
         testPostWithBody,
         testPostLetraWithBody,
@@ -76,7 +81,15 @@ async function main() {
         exitos += (await test()) ? 1 : 0
     }
 
-
     console.log(`\nresultado de las pruebas: ${exitos}/${tests.length}`)
 }
 setTimeout(main, 2000)
+
+// function obtenerLetraAleatoria() {
+
+// let str = '';
+// const ref = 'xyzwqkb';
+// str += ref.charAt(Math.floor(Math.random()*ref.length));
+
+// return str;
+// }
