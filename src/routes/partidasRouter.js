@@ -15,14 +15,14 @@ router.get('/', (req, res) => {
     }
 })
 
-app.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     console.log('GETTING: ' + req.url)
 
     try {
         const partidaBuscada = partida.getPartidaById(req.params.id)
 
         if (!partidaBuscada) {
-            throw { status: 404, descripcion: 'partida no encontrado' }
+            throw { status: 404, descripcion: 'partida no encontrada' }
         }
         res.json(partidaBuscada)
     } catch (err) {
