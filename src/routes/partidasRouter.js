@@ -70,7 +70,6 @@ router.patch('/:id', (req, res) => {
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
         const partidaBuscada = partida.getPartidaById(id);
-        
         if(partidaBuscada === null) {
             throw{ status:404, descripcion: 'No existe una partida con ese id'}
         }

@@ -7,10 +7,6 @@ app.set('json spaces', 4)
 const partidasRouter = require('./src/routes/partidasRouter')
 app.use('/api/partidas',partidasRouter)
 
-const palabrasRouter = require('./ServidorPalabrasRandom/routes/palabrasRouter')
-app.use('/api/palabra',palabrasRouter)
-
-
 const puerto = 5001
 app.listen(puerto, () => {
     // eslint-disable-next-line no-console
