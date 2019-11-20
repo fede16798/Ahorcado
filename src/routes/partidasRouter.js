@@ -2,7 +2,6 @@ const _ = require('lodash')
 const Joi = require('@hapi/joi')
 const router = require('express').Router()
 const partida = require('../Partida/partida')
-const juego = require('../Juego/juego')
 
 const baseURI = '/api/partidas'
 
@@ -29,16 +28,6 @@ router.get('/:id', (req, res) => {
         res.status(err.status).json(err)
     }
 })
-
-router.get('/palabra', (req, res) => {
-    console.log('GETTING: ' + baseURI + req.url)
-    try {
-        res.json("Tu palabra es Auto")
-    } catch (err) {
-        res.status(err.status).json(err)
-    }
-})
-
 
 //Aca crea una partida. Requiere un JSON con formato "mail":"*MAIL*" 
 router.post('/', async (req, res) => {
@@ -77,7 +66,7 @@ router.patch('/:id', (req, res) => {
         letra : req.body.letra
     }
     try {
-         if (juego.esLetraInvalida(arriesga)){
+         if (esLetraInvalida(arriesga)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
         const partidaBuscada = partida.getPartidaById(id);
@@ -123,6 +112,16 @@ function esPartidaInvalida(partida) {
     }
     const { error } = Joi.validate(partida, esquema)
     return error
+}
+
+function esLetraInvalida(game){
+    console.log("validando letra")
+    const esquema = {
+        id: Joi.number().integer().min(0),
+        letra: Joi.string().regex(/^[a-zA-Z]$/).min(1).max(1).required()
+    }
+    const {error} = Joi.validate(game,esquema);
+    return error;
 }
 
 
