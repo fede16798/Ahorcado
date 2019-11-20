@@ -194,7 +194,7 @@ setTimeout(main, 2000)
 
 function obtenerLetraAleatoria() {
     let str = '';
-    const ref = 'xyzwqk';
+    const ref = 'xywqk';
     str += ref.charAt(Math.floor(Math.random()*ref.length));
 
     return str;
