@@ -16,27 +16,25 @@ const palabras = [{"palabra":"Programacion","definicion":"Materia piola"},
 // ruta
 
 //este GET tiene como funcion principal obtener una palabra aleatoria consumiendo la api
-app.get("/api/palabras", (req, res) => {
+app.get("/api/palabra", (req, res) => {
   console.log("GETTING: " + req.url);
   try {
     let result;
-    result = getPalabraAleatoria();
+    result = seleccionarPalabra();
     if (_.isEmpty(result)) {
       throw { status: 404, descripcion: "No hay palabras" };
     } 
     res.json(result);
-  } catch (err) {
+  }catch (err) {
     res.status(err.status).json(err);
   }
 });
 
-function getPalabraAleatoria(){
-  return palabras[Math.floor(Math.random()*palabras.length)]
+function seleccionarPalabra(){
+  let index = Math.floor(Math.random() * palabras.length);
+  let palabra = palabras[index]
+  return palabra;
 }
-
-
-
-
 
 const puerto = 8080;
 app.listen(puerto, () => {
@@ -44,5 +42,5 @@ app.listen(puerto, () => {
 });
 
 module.exports = {
-  getPalabraAleatoria,
+  seleccionarPalabra,
 }

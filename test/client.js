@@ -5,7 +5,7 @@ const serverUrl = 'http://localhost:5001/api/'
 async function crearPartida(mail) {
     const postOpt = {
         method: 'POST',
-        uri: serverUrl + 'partida',
+        uri: serverUrl + 'partidas',
         json: true
     }
     if (mail) {
@@ -16,8 +16,8 @@ async function crearPartida(mail) {
 
 async function arriesgarLetra(letra){
     const postOpt = {
-        method: 'POST',
-        uri: serverUrl + 'partida/' + 1,
+        method: 'PATCH',
+        uri: serverUrl + 'partidas/' + 1,
         json: true
     }
     if (letra) {

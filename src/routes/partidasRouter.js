@@ -4,7 +4,7 @@ const router = require('express').Router()
 const partida = require('../Partida/partida')
 const juego = require('../Juego/juego')
 
-const baseURI = '/api/partida'
+const baseURI = '/api/partidas'
 
 router.get('/', (req, res) => {
     console.log('GETTING: ' + baseURI + req.url)
@@ -26,7 +26,7 @@ router.get('/palabra', (req, res) => {
 
 
 //Aca crea una partida. Requiere un JSON con formato "mail":"*MAIL*" 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     console.log('POSTING: ' + req.url)
     const nuevaPartida = req.body
     try {
@@ -39,20 +39,21 @@ router.post('/', (req, res) => {
             throw { status: 400, descripcion: 'ya existe un partida con ese id' }
         };
 
-        partida.agregarPartida(nuevaPartida, req.body.mail);
+        await partida.agregarPartida(nuevaPartida, req.body.mail);
 
         //Cuando crea la partida muestra informacion de la misma
         partidaAux = partida.generarEstadoPartida(nuevaPartida);
         res.status(201).json(partidaAux);
 
-    } catch (err) {
+    } 
+    catch (err) {
         console.log(err)
         res.status(err.status).json(err);
     }
 })
 
-router.post('/:id', (req, res) => {
-    console.log('POSTING: arriesgando letra en la partida ' + req.url);
+router.patch('/:id', (req, res) => {
+    console.log('PATCHING: arriesgando letra en la partida ' + req.url);
     const letra = req.body.letra;
     const id = req.params.id
     // ACA

@@ -1,8 +1,8 @@
-const palabrasAPI = require('./api');
+const palabrasAPI = require('./palabrasAPI');
 const palabrasArray = require('./palabrasArray')
 
 function getPalabrasDAO(){
-return palabrasArray
+return palabrasAPI
 }
 
 module.exports = {

@@ -9,9 +9,12 @@ function getPartidaById(id) {
     return partidas.find(u => u.id == id)
 }
 
-function agregarPartida(partida , email) {
-    partida.id = ultimoId + 1;
-    partida.palabra = palabrasDAO.getPalabrasDAO().seleccionarPalabra();
+async function agregarPartida(partida , email) {
+    const objetoRecibido = await palabrasDAO.getPalabrasDAO().seleccionarPalabra();
+    
+    partida.id = ultimoId + 1;    
+    partida.palabra = objetoRecibido.palabra;
+    partida.definicion = objetoRecibido.definicion;
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
     partida.vidas = 1;
@@ -34,22 +37,23 @@ function generarEstadoPartida(partida){
 }
 
 function ocultarPalabra(palabra){
-    let num;
-    let palabraOcult = "";
-    //consigo cantida de guiones necesarios
-    for (let index = 0; index < palabra.length; index++) {
-        num = index;
-    }
-    num++;
-   // iguala la palabra oculta a la palabra elegida
-    for (let i = 0; i < num; i++){
-       palabraOcult = ("-" + palabraOcult)
-    }
+let num;
+let palabraOcult = "";
+let palabraNueva = String(palabra);
 
-    console.log("cantidad de letras " + num );
-    console.log("palabra oculta " + palabraOcult);
+for (let index = 0; index < palabraNueva.length; index++){
+    num = index;
+}
+num++;
 
-    return palabraOcult;
+for(let i = 0; i < num; i++){
+    palabraOcult = ("-" + palabraOcult);
+}
+
+console.log("cantidad de letras " + num)
+console.log("Palabra oculta " + palabraOcult)
+
+return palabraOcult
 }
 
 function esPartidaGanada(partida){

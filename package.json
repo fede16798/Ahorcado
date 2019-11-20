@@ -4,7 +4,7 @@
   "description": "",
   "main": "routes.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./server.js node ./test/testPartidas.js",
     "start": "node ./server.js"
   },
   "keywords": [],
@@ -12,13 +12,15 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "15.0.2",
-    "email-templates": "^6.0.3",
+    "email-templates": "6.0.3",
     "express": "4.17.1",
+    "knex": "0.20.2",
     "letter": "0.0.1",
     "lodash": "4.17.15",
     "nodemailer": "6.3.1",
-    "path": "^0.12.7",
-    "request-promise-native": "^1.0.8"
+    "path": "0.12.7",
+    "request-promise": "^4.2.5",
+    "request-promise-native": "1.0.8"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"

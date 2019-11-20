@@ -5,7 +5,7 @@ app.use(express.json())
 app.set('json spaces', 4)
 
 const partidasRouter = require('./src/routes/partidasRouter')
-app.use('/api/partida',partidasRouter)
+app.use('/api/partidas',partidasRouter)
 
 const palabrasRouter = require('./ServidorPalabrasRandom/routes/palabrasRouter')
 app.use('/api/palabra',palabrasRouter)

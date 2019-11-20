@@ -34,6 +34,7 @@ exports.mandarMail = function(resultado,partida) {
     locals: {
       fname: usuario,
       word: partida.palabra,
+      definicion: partida.definicion,
       vidas: partida.vidas,
       palabraOculta: palabra.palabraOculta,
       id: partida.id
