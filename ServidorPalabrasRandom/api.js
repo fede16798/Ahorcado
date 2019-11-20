@@ -8,9 +8,9 @@ app.set("json spaces", 4);
 
 // base de datos
 
-const palabras = [{"palabra":"Programacion","definicion":"Materia piola"},
-                  {"palabra":"Matematica","definicion":"Materia aburrida"},
-                  {"palabra":"Ingles","definicion":"What is this?"}
+const palabras = [{"palabra":"solid","definicion":"En ingeniería de software, SOLID es un acrónimo mnemónico introducido por Robert C. Martin​​ a comienzos de la década del 2000​ que representa cinco principios básicos de la programación orientada a objetos y el diseño."},
+                  {"palabra":"abstraccion","definicion":"La abstracción consiste en aislar un elemento de su contexto o del resto de los elementos que lo acompañan. En programación, el término se refiere al énfasis en el ¿qué hace? más que en el ¿cómo lo hace?"},
+                  {"palabra":"interfaz","definicion":"se utiliza para nombrar a la conexión funcional entre dos sistemas, programas, dispositivos o componentes de cualquier tipo, que proporciona una comunicación de distintos niveles permitiendo el intercambio de información."}
                 ];
 
 // ruta
