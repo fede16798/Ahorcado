@@ -4,7 +4,7 @@
   "description": "",
   "main": "routes.js",
   "scripts": {
-    "test": "node ./server.js node ./test/testPartidas.js",
+    "test": "node ./test/testPartidas.js",
     "start": "node ./server.js"
   },
   "keywords": [],

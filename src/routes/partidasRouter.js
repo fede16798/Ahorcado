@@ -9,7 +9,22 @@ const baseURI = '/api/partidas'
 router.get('/', (req, res) => {
     console.log('GETTING: ' + baseURI + req.url)
     try {
-        res.json("funciono partida")
+        res.json(partida.getPartidas())
+    } catch (err) {
+        res.status(err.status).json(err)
+    }
+})
+
+router.get('/:id', (req, res) => {
+    console.log('GETTING: ' + req.url)
+
+    try {
+        const partidaBuscada = partida.getPartidaById(req.params.id)
+
+        if (!partidaBuscada) {
+            throw { status: 404, descripcion: 'partida no encontrada' }
+        }
+        res.json(partidaBuscada)
     } catch (err) {
         res.status(err.status).json(err)
     }
@@ -36,7 +51,7 @@ router.post('/', async (req, res) => {
         const partidaBuscada = partida.getPartidaById(nuevaPartida.id);
 
         if (partidaBuscada) {
-            throw { status: 400, descripcion: 'ya existe un partida con ese id' }
+            throw { status: 403, descripcion: 'ya existe un partida con ese id' }
         };
 
         await partida.agregarPartida(nuevaPartida, req.body.mail);
@@ -66,7 +81,11 @@ router.patch('/:id', (req, res) => {
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
         const partidaBuscada = partida.getPartidaById(id);
-    
+        
+        if(partidaBuscada === null) {
+            throw{ status:404, descripcion: 'No existe una partida con ese id'}
+        }
+
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
             partida.notificarResultado(false, partidaBuscada);
@@ -80,7 +99,7 @@ router.patch('/:id', (req, res) => {
         }
 
         if (partidaBuscada.letrasArriesgadas.includes(letra)){
-            throw { status:400, descripcion: 'La letra ' + letra + ' ya fue ingresada anteriormente'}
+            throw { status:403, descripcion: 'La letra ' + letra + ' ya fue ingresada anteriormente'}
         } 
        
         partidaBuscada.letrasArriesgadas.push(letra);
@@ -89,7 +108,7 @@ router.patch('/:id', (req, res) => {
         
         partidaAux = partida.generarEstadoPartida(partidaBuscada)
 
-        res.status(201).json(partidaAux)
+        res.status(200).json(partidaAux)
     } catch (err) {
         res.status(err.status).json(err)
     } 

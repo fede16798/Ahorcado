@@ -80,6 +80,10 @@ function getVidas(){
     return vidas
 }
 
+function getPartidas(){
+    return partidas;
+}
+
 function verificarLetrasEnPalabra (partida, letra) {
     palabra = partida.palabra.toLowerCase();
     letra = letra.toLowerCase();
@@ -116,5 +120,6 @@ module.exports = {
     agregarLetraArriesgada,
     getLetrasArriesgadas,
     getVidas,
-    verificarLetrasEnPalabra
+    verificarLetrasEnPalabra,
+    getPartidas
 }
