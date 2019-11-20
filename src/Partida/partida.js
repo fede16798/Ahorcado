@@ -17,7 +17,7 @@ async function agregarPartida(partida , email) {
     partida.definicion = objetoRecibido.definicion;
     partida.palabraOculta = ocultarPalabra(partida.palabra);
     partida.mail = email;
-    partida.vidas = 1;
+    partida.vidas = 2;
     partida.letrasArriesgadas = [];
     partida.gano = false;
     partidas.push(partida)

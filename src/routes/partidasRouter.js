@@ -66,14 +66,16 @@ router.patch('/:id', (req, res) => {
         letra : req.body.letra
     }
     try {
+        const partidaBuscada = partida.getPartidaById(req.params.id)
+
+        if (!partidaBuscada) {
+            throw { status: 404, descripcion: 'partida no encontrada' }
+        }
+
          if (esLetraInvalida(arriesga)){
             throw { status: 400, descripcion: 'La letra ingresada no puede ser numero o caracter especial'}
         } 
-        const partidaBuscada = partida.getPartidaById(id);
-        if(partidaBuscada === null) {
-            throw{ status:404, descripcion: 'No existe una partida con ese id'}
-        }
-
+       
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
             partida.notificarResultado(false, partidaBuscada);
