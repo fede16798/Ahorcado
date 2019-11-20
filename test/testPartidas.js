@@ -35,7 +35,7 @@ async function testPostConBody() {
     return result
 }
 
-async function testPostLetraConBody() {
+async function testPatchLetraConBody() {
  
     let result = false
     let letraTemporal = obtenerLetraAleatoria();
@@ -75,7 +75,7 @@ async function testArriesgarMismaLetra(){
     return result
 }
 
-async function testPostLetraConBodyAPartidaTerminada() {
+async function testPatchLetraConBodyAPartidaTerminada() {
  
     let result = false
     try {
@@ -98,7 +98,7 @@ async function testPostLetraConBodyAPartidaTerminada() {
 }
 
 //ARRIESGAR UNA LETRA INVALIDA
-async function testPostLetraInvalidaConBody() {
+async function testPatchLetraInvalidaConBody() {
  
     let result = false
     try {
@@ -136,28 +136,6 @@ async function testPostSinBody() {
     return result
 }
 
-// async function testPostLetraAPartidaInvalida() {
- 
-//     let result = false
-//     try {
-//         let partida = await cli.arriesgarLetra({
-//             letra: 'a',
-//         }, 9)
-        
-//         validarPartida(partida)
-//         console.log("letra a partida invalida arriesgada")
-//         result = true
-//     } catch (err) {
-//             if (err.statusCode == 404) {
-//                 console.log('Post a una partida inexistente: ok , era lo esperado')
-//                 result = true
-//             } else {
-//                 console.log(err.message)
-//             }
-//         }
-//     return result
-// }
-
 async function testGetAPartidaInexsistente() {
     let result = false
 
@@ -193,12 +171,12 @@ async function main() {
     const tests = [
         testPostConBody,
         testGetAPartidaInexsistente,
-        testPostLetraConBody,         
+        testPatchLetraConBody,         
         testArriesgarMismaLetra,
-        testPostLetraConBody,
-        testPostLetraConBodyAPartidaTerminada,
+        testPatchLetraConBody,
+        testPatchLetraConBodyAPartidaTerminada,
         testPostSinBody, 
-        testPostLetraInvalidaConBody,      
+        testPatchLetraInvalidaConBody,      
         testGetAll
     ]
 
