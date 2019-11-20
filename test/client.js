@@ -14,10 +14,10 @@ async function crearPartida(mail) {
     return await request(postOpt)
 }
 
-async function arriesgarLetra(letra){
+async function arriesgarLetra(letra, id){
     const postOpt = {
         method: 'POST',
-        uri: serverUrl + 'partida/' + 1,
+        uri: serverUrl + 'partida/' + id,
         json: true
     }
     if (letra) {
@@ -26,7 +26,25 @@ async function arriesgarLetra(letra){
     return await request(postOpt)
 }
 
+async function buscarPorId(id) {
+    return await request({
+        method: 'GET',
+        uri: serverUrl + 'partida/' + id,
+        json: true
+    })
+}
+
+async function buscarTodos() {
+    return await request({
+        method: 'GET',
+        uri: serverUrl + 'partida',
+        json: true
+    })
+}
+
 module.exports = {
     arriesgarLetra,
     crearPartida,
+    buscarPorId,
+    buscarTodos
 }
