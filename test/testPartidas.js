@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 const Joi = require('@hapi/joi')
 const cli = require('./client')
+
+let letraAux = '';
 //VALIDACIONES
 
 function validarPartida(partida) {
@@ -36,9 +38,11 @@ async function testPostConBody() {
 async function testPostLetraConBody() {
  
     let result = false
+    let letraTemporal = obtenerLetraAleatoria();
+    letraAux = letraTemporal;
     try {
         let partida = await cli.arriesgarLetra({
-            letra: obtenerLetraAleatoria(),
+            letra: letraTemporal,
         }, 1)
         
         validarPartida(partida)
@@ -46,6 +50,27 @@ async function testPostLetraConBody() {
         result = true
     } catch (err) {
         console.log(err.message)
+    }
+    return result
+}
+
+async function testArriesgarMismaLetra(){
+    try {
+        let partida = await cli.arriesgarLetra({
+            letra: letraAux,
+        }, 1)
+        
+        validarPartida(partida)
+        console.log("letra arriesgada")
+        result = true
+
+    } catch (err) {
+        if(err.statusCode == 403){
+            console.log('PATCH a letra repetida: ok (era el error esperado)');
+            result = true;
+        } else {
+            console.log(err.message)
+        }
     }
     return result
 }
@@ -168,10 +193,12 @@ async function main() {
     const tests = [
         testPostConBody,
         testGetAPartidaInexsistente,
+        testPostLetraConBody,         
+        testArriesgarMismaLetra,
         testPostLetraConBody,
         testPostLetraConBodyAPartidaTerminada,
-        testPostSinBody,
-        testPostLetraInvalidaConBody,
+        testPostSinBody, 
+        testPostLetraInvalidaConBody,      
         testGetAll
     ]
 
