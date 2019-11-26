@@ -2,7 +2,7 @@ const partidaDB = require('./partidaDB')
 const partida = require('./partida')
 
 function getPartidaDAO(){
-return partidaDB
+return partida
 }
 
 module.exports = {

@@ -1,7 +1,8 @@
 const _ = require('lodash')
 const Joi = require('@hapi/joi')
 const router = require('express').Router()
-const partida = require('../Partida/partida')
+const partidaImportada = require('../Partida/daoFactoryPartida')
+const partida = partidaImportada.getPartidaDAO();
 
 const baseURI = '/api/partidas'
 
