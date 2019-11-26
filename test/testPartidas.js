@@ -54,6 +54,26 @@ async function testPatchLetraConBody() {
     return result
 }
 
+async function testPatchKConBody() {
+ 
+    let result = false
+    let letraTemporal = "Z";
+    letraAux = letraTemporal;
+    try {
+        let partida = await cli.arriesgarLetra({
+            letra: letraTemporal,
+        }, 1)
+        
+        validarPartida(partida)
+        console.log("letra arriesgada")
+        result = true
+    } catch (err) {
+        console.log(err.message)
+    }
+    return result
+}
+
+
 async function testArriesgarMismaLetra(){
     try {
         let partida = await cli.arriesgarLetra({
@@ -167,13 +187,13 @@ async function testGetAll(){
 
 async function main() {
     let exitos = 0;
-   
+       
     const tests = [
         testPostConBody,
         testGetAPartidaInexsistente,
         testPatchLetraConBody,         
         testArriesgarMismaLetra,
-        testPatchLetraConBody,
+        testPatchKConBody,
         testPatchLetraConBodyAPartidaTerminada,
         testPostSinBody, 
         testPatchLetraInvalidaConBody,      
@@ -194,7 +214,7 @@ setTimeout(main, 2000)
 
 function obtenerLetraAleatoria() {
     let str = '';
-    const ref = 'xywqk';
+    const ref = 'xywq';
     str += ref.charAt(Math.floor(Math.random()*ref.length));
 
     return str;

@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
 })
 
 router.patch('/:id', (req, res) => {
-    console.log('PATCHING: arriesgando letra en la partida ' + req.url);
+    console.log('PATCHING: arriesgando letra ' + req.body.letra + ' en la partida ' + req.url);
     const letra = req.body.letra;
     const id = req.params.id
     // ACA

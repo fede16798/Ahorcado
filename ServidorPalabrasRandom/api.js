@@ -11,7 +11,6 @@ app.set("json spaces", 4);
 const palabras = [{"palabra": "solid","definicion":"En ingeniería de software, SOLID es un acrónimo mnemónico introducido por Robert C. Martin​​ a comienzos de la década del 2000​ que representa cinco principios básicos de la programación orientada a objetos y el diseño."},
                   {"palabra": "abstraccion","definicion":"La abstracción consiste en aislar un elemento de su contexto o del resto de los elementos que lo acompañan. En programación, el término se refiere al énfasis en el ¿qué hace? más que en el ¿cómo lo hace?"},
                   {"palabra": "interfaz","definicion":"se utiliza para nombrar a la conexión funcional entre dos sistemas, programas, dispositivos o componentes de cualquier tipo, que proporciona una comunicación de distintos niveles permitiendo el intercambio de información."},
-                  {"palabra": "algoritmo" , "defincion": "Conjunto ordenado de operaciones sistemáticas que permite hacer un cálculo y hallar la solución de un tipo de problemas"},
                   {"palabra": "java", "definicion": "Lenguaje de programación y una plataforma informática comercializada por primera vez en 1995"},
                   {"palabra": "turing", "definicion": "Considerado uno de los padres de la ciencia de la computación y precursor de la informática moderna"},
                   {"palabra": "enigma" , "definicion": "Maquina de rotores que permitía usarla tanto para cifrar como para descifrar mensajes"},
@@ -54,5 +53,5 @@ app.listen(puerto, () => {
 });
 
 module.exports = {
-  seleccionarPalabra,
+  // seleccionarPalabra,
 }
