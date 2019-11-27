@@ -33,7 +33,7 @@ app.get("/api/palabra", (req, res) => {
     let result;
     result = seleccionarPalabra();
     if (_.isEmpty(result)) {
-      throw { status: 404, descripcion: "No hay palabras" };
+      throw { status: 500, descripcion: "No hay palabras" };
     } 
     res.json(result);
   }catch (err) {
