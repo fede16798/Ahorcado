@@ -2,8 +2,11 @@
 const Joi = require('@hapi/joi')
 const cli = require('./client')
 
+
 let letraAux = '';
 //VALIDACIONES
+
+
 
 function validarPartida(partida) {
     const partidaSchema = {
@@ -183,6 +186,10 @@ async function testGetAll(){
         console.log(err.message)
     }
     return result
+}
+
+async function ganar(){
+    
 }
 
 async function main() {

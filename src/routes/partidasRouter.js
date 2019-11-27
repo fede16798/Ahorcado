@@ -44,10 +44,12 @@ router.post('/', async (req, res) => {
             throw { status: 403, descripcion: 'ya existe un partida con ese id' }
         };
 
+
         await partida.agregarPartida(nuevaPartida, req.body.mail);
 
         //Cuando crea la partida muestra informacion de la misma
         partidaAux = partida.generarEstadoPartida(nuevaPartida);
+        console.log(nuevaPartida.palabra);
         res.status(201).json(partidaAux);
 
     } 

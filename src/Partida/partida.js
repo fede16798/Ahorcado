@@ -10,8 +10,9 @@ function getPartidaById(id) {
 }
 
 async function agregarPartida(partida , email) {
-    const objetoRecibido = await palabrasDAO.getPalabrasDAO().seleccionarPalabra();
-    
+
+    objetoRecibido = await palabrasDAO.getPalabrasDAO().seleccionarPalabra();
+
     partida.id = ultimoId + 1;    
     partida.palabra = objetoRecibido.palabra;
     partida.definicion = objetoRecibido.definicion;

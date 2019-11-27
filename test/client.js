@@ -42,6 +42,7 @@ async function buscarTodos() {
     })
 }
 
+
 module.exports = {
     arriesgarLetra,
     crearPartida,
