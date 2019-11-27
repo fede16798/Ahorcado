@@ -3,9 +3,9 @@ const Joi = require('@hapi/joi')
 const cli = require('./client')
 
 
-let letraAux = '';
-//VALIDACIONES
+let letraAux = ''; //esta variable sirve para que despues se pueda postear una letra repetida 
 
+//VALIDACIONES
 
 
 function validarPartida(partida) {
@@ -203,7 +203,7 @@ async function testPostPartidaParaGanar(){
     return result
 }
 
-let numParaSaberQueLetraArriesgar = 1;
+let numParaSaberQueLetraArriesgar = 1; //esta variable sirve para que se modifique automaticamente a que letra arriesgar en la partida ganadora
 
 async function testPatchLetraConBodyParaGanar() {
     let num = numParaSaberQueLetraArriesgar;
