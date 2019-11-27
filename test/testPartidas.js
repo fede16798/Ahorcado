@@ -98,7 +98,7 @@ async function testArriesgarMismaLetra(){
     }
     return result
 }
-
+        //ARRIESGA UNA LETRA A UNA PARTIDA TERMINADA
 async function testPatchLetraConBodyAPartidaTerminada() {
  
     let result = false
@@ -121,7 +121,7 @@ async function testPatchLetraConBodyAPartidaTerminada() {
     return result
 }
 
-//ARRIESGAR UNA LETRA INVALIDA
+        //ARRIESGAR UNA LETRA INVALIDA
 async function testPatchLetraInvalidaConBody() {
  
     let result = false
@@ -203,7 +203,6 @@ async function testPostPartidaParaGanar(){
     }
     return result
 }
-
 
 async function testPatchLetraConBodyParaGanar() {
     let num = numParaSaberQueLetraArriesgar;
