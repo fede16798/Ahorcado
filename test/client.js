@@ -14,10 +14,22 @@ async function crearPartida(mail) {
     return await request(postOpt)
 }
 
-async function arriesgarLetra(letra, id){
+async function arriesgarLetraEnPartidaPerdedora(letra, id){
     const postOpt = {
         method: 'PATCH',
         uri: serverUrl + 'partidas/' + 1,
+        json: true
+    }
+    if (letra) {
+        postOpt.body = letra
+    }
+    return await request(postOpt)
+}
+
+async function arriesgarLetraEnPartidaGanadora(letra, id){
+    const postOpt = {
+        method: 'PATCH',
+        uri: serverUrl + 'partidas/' + 2,
         json: true
     }
     if (letra) {
@@ -44,7 +56,8 @@ async function buscarTodos() {
 
 
 module.exports = {
-    arriesgarLetra,
+    arriesgarLetraEnPartidaPerdedora,
+    arriesgarLetraEnPartidaGanadora,
     crearPartida,
     buscarPorId,
     buscarTodos
