@@ -24,6 +24,7 @@ function validarPartida(partida) {
 
 // TESTS
 
+        //GENERA UNA PARTIDA PARA PERDER
 async function testPostConBody() {
     let result = false
     try {
@@ -39,6 +40,7 @@ async function testPostConBody() {
     return result
 }
 
+        //ARRIESGA UNA LETRA
 async function testPatchLetraConBody() {
  
     let result = false
@@ -77,7 +79,7 @@ async function testPatchZConBody() {
     return result
 }
 
-
+        //ARRIESGA UNA LETRA QUE YA FUE INGRESADA ANTERIORMENTE
 async function testArriesgarMismaLetra(){
     try {
         let partida = await cli.arriesgarLetraEnPartidaPerdedora({
@@ -144,6 +146,7 @@ async function testPatchLetraInvalidaConBody() {
     return result
 }
 
+        //ARRIESGA UNA LETRA CON EL BODY VACIO
 async function testPostSinBody() {
     let result = false
     try {
@@ -160,6 +163,7 @@ async function testPostSinBody() {
     return result
 }
 
+        //SE HACE UN GET A UNA PARTIDA QUE NO EXISTE
 async function testGetAPartidaInexsistente() {
     let result = false
 
@@ -177,6 +181,7 @@ async function testGetAPartidaInexsistente() {
     return result
 }
 
+        //SE HACE UN GET DE TODAS LAS PARTIDAS ACTIVAS
 async function testGetAll(){
     result = false;
     try {
@@ -189,6 +194,7 @@ async function testGetAll(){
     return result
 }
 
+        //SE CREA UNA PARTIDA PARA GANAR
 async function testPostPartidaParaGanar(){
     let result = false
     try {
@@ -204,6 +210,7 @@ async function testPostPartidaParaGanar(){
     return result
 }
 
+        //ARRIESGA LETRAS A LA PARTIDA GANADORA
 async function testPatchLetraConBodyParaGanar() {
     let num = numParaSaberQueLetraArriesgar;
     numParaSaberQueLetraArriesgar++;
