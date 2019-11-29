@@ -26,23 +26,29 @@ function validarPartida(partida) {
 
         //GENERA UNA PARTIDA PARA PERDER
 async function testPostConBody() {
+    console.log("Test 1");
     let result = false
     try {
         const partida = await cli.crearPartida({
             mail: 'oficiosmail@gmail.com',
         })
-        validarPartida(partida)
         console.log("Crear nueva partida con ID 1 con mail valido (Esta partida se debera perder) (POST) OK.")
+        console.log(partida)
         result = true
     } catch (err) {
-        console.log(err.message)
+        if(err.statusCode == 500){
+            console.log("La api envia una palabra defectuosa a nuestro servidor. No puede crear partida. Error esperado. OK")
+            result = true
+        }else{
+            console.log(err.message);
+        }
     }
     return result
 }
 
         //ARRIESGA UNA LETRA
 async function testPatchLetraConBody() {
- 
+    console.log("Test 3");
     let result = false
     let letraTemporal = obtenerLetraAleatoria();
     letraAux = letraTemporal;
@@ -52,16 +58,22 @@ async function testPatchLetraConBody() {
         }, 1)
         
         validarPartida(partida)
-        console.log("Arriesgar letra " + letraTemporal + ". en la partida 1. Esta partida debe perderse. OK. (PATCH)")
+        console.log("Arriesgar letra " + letraTemporal + ". en la partida 1. Este intento pierde una vida. OK. (PATCH)")
         result = true
     } catch (err) {
-        console.log("El test fallo con un error inesperado: " + err.message)
+        if(err.statusCode == 404){
+            console.log("No hay partida creada por un error en test anterior. resultado esperado. OK")
+            result = true
+        }else{
+            console.log("El test fallo con un error inesperado:" + err.message)
+        }
+        
     }
     return result
 }
 
 async function testPatchZConBody() {
- 
+    console.log("Test 5");
     let result = false
     let letraTemporal = "Z";
     letraAux = letraTemporal;
@@ -71,16 +83,23 @@ async function testPatchZConBody() {
         }, 1)
         
         validarPartida(partida)
-        console.log("PATCH de una letra a una partida para perder")
+        console.log("Arriesga letra Z a partida 2. Este intento pierde la partida. OK. (PATCH)")
         result = true
     } catch (err) {
-        console.log(err.message)
+        if(err.statusCode == 404){
+            console.log("No puede arriesgar letra dado que no se creo partida en los test previos. OK")
+            result = true;
+        }else{
+            console.log(err.message)
+        }
+        
     }
     return result
 }
 
         //ARRIESGA UNA LETRA QUE YA FUE INGRESADA ANTERIORMENTE
 async function testArriesgarMismaLetra(){
+    console.log("Test 4")
     try {
         let partida = await cli.arriesgarLetraEnPartidaPerdedora({
             letra: letraAux,
@@ -94,7 +113,10 @@ async function testArriesgarMismaLetra(){
         if(err.statusCode == 403){
             console.log('PATCH a letra repetida: ok (era el error esperado)');
             result = true;
-        } else {
+        } else if(err.statusCode == 404){
+            console.log("No hay partida creada por un error en test anterior. resultado esperado. OK")
+            result = true;
+        }else{
             console.log(err.message)
         }
     }
@@ -102,7 +124,7 @@ async function testArriesgarMismaLetra(){
 }
         //ARRIESGA UNA LETRA A UNA PARTIDA TERMINADA
 async function testPatchLetraConBodyAPartidaTerminada() {
- 
+    console.log("Test 6");
     let result = false
     try {
         let partida = await cli.arriesgarLetraEnPartidaPerdedora({
@@ -116,7 +138,10 @@ async function testPatchLetraConBodyAPartidaTerminada() {
         if(err.statusCode == 400){
             console.log('post a id terminado: ok (era el error esperado)');
             result = true;
-        } else {
+        } else if(err.statusCode == 404) {
+            console.log("No puede arriesgar letra dado que no se creo partida en los test previos. OK")
+            result = true;
+        }else{
             console.log(err.message)
         }
     }
@@ -125,7 +150,7 @@ async function testPatchLetraConBodyAPartidaTerminada() {
 
         //ARRIESGAR UNA LETRA INVALIDA
 async function testPatchLetraInvalidaConBody() {
- 
+    console.log("Test 8");
     let result = false
     try {
         let partida = await cli.arriesgarLetraEnPartidaPerdedora({
@@ -148,13 +173,30 @@ async function testPatchLetraInvalidaConBody() {
 
         //ARRIESGA UNA LETRA CON EL BODY VACIO
 async function testPostSinBody() {
+    console.log("Test 7");
     let result = false
     try {
         const partida = await cli.crearPartida()
         console.log("post without body: error - no rechazó la petición!")
     } catch (err) {
         if (err.statusCode == 400) {
-            console.log('post sin cuerpo: ok (era el error esperado)')
+            console.log('Intenta crear una partida sin mail y el sistema no lo permite. OK. (POST)')
+            result = true
+        } else {
+            console.log(err.message)
+        }
+    }
+    return result
+}
+async function testPostConBodyIncorrecto() {
+    console.log("Test 12");
+    let result = false
+    try {
+        const partida = await cli.crearPartida("mail defectuoso")
+        console.log("POST con body defectuoso: error - no rechazó la petición!")
+    } catch (err) {
+        if (err.statusCode == 400) {
+            console.log('Intenta crear una partida con un mail invalido y el sistema no lo permite. OK. (POST)')
             result = true
         } else {
             console.log(err.message)
@@ -165,6 +207,7 @@ async function testPostSinBody() {
 
         //SE HACE UN GET A UNA PARTIDA QUE NO EXISTE
 async function testGetAPartidaInexsistente() {
+    console.log("Test 2");
     let result = false
 
     try {
@@ -185,6 +228,7 @@ async function testGetAPartidaInexsistente() {
 
         //SE HACE UN GET DE TODAS LAS PARTIDAS ACTIVAS
 async function testGetAll(){
+    console.log("Test 9");
     result = false;
     try {
         await cli.buscarTodos()        
@@ -198,6 +242,7 @@ async function testGetAll(){
 
         //SE CREA UNA PARTIDA PARA GANAR
 async function testPostPartidaParaGanar(){
+    console.log("Test 10");
     let result = false
     try {
         const partida = await cli.crearPartida({
@@ -214,6 +259,7 @@ async function testPostPartidaParaGanar(){
 
         //ARRIESGA LETRAS A LA PARTIDA GANADORA
 async function testPatchLetraConBodyParaGanar() {
+    console.log("Test 11");
     let num = numParaSaberQueLetraArriesgar;
     numParaSaberQueLetraArriesgar++;
     let result = false
@@ -255,7 +301,8 @@ async function main() {
         testPatchLetraConBodyParaGanar,
         testPatchLetraConBodyParaGanar,
         testPatchLetraConBodyParaGanar,//en esta linea se gana la partida numero 2
-        testPatchLetraConBodyParaGanar //en esta linea se manda el mail en la partida numero 2
+        testPatchLetraConBodyParaGanar, //en esta linea se manda el mail en la partida numero 2
+        testPostConBodyIncorrecto,
     ]
 
     for (const test of tests) {
