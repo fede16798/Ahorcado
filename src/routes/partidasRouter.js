@@ -33,23 +33,24 @@ router.get('/:id', (req, res) => {
 //Aca crea una partida. Requiere un JSON con formato "mail":"*MAIL*" 
 router.post('/', async (req, res) => {
     console.log('POSTING: ' + req.url)
-    const nuevaPartida = req.body
+
+    const JSON_mail = req.body
+
     try {
-        if (esPartidaInvalida(nuevaPartida)) {
-            throw { status: 400, descripcion: 'el partida posee un formato json invalido o faltan datos' }
+        if (esJSONInvalido(JSON_mail)) {
+            throw { status: 400, descripcion: 'El JSON recibido no posee un formato valido' }
         }
-        const partidaBuscada = partida.getPartidaById(nuevaPartida.id);
 
-        if (partidaBuscada) {
-            throw { status: 403, descripcion: 'ya existe un partida con ese id' }
-        };
+        // const partidaBuscada = partida.getPartidaById(nuevaPartida.id);
+        // if (partidaBuscada) {
+        //     throw { status: 403, descripcion: 'ya existe un partida con ese id' }
+        // };
 
+        nuevaPartida = await partida.agregarPartida(JSON_mail.mail);
 
-        await partida.agregarPartida(nuevaPartida, req.body.mail);
 
         //Cuando crea la partida muestra informacion de la misma
         partidaAux = partida.generarEstadoPartida(nuevaPartida);
-        console.log(nuevaPartida.palabra);
         res.status(201).json(partidaAux);
 
     } 
@@ -108,13 +109,12 @@ router.patch('/:id', (req, res) => {
 })
 
 
-//Verifica con Joi si el formato de partida es valido
-function esPartidaInvalida(partida) {
+//Verifica con Joi si el JSON recibido es valido
+function esJSONInvalido(json_recibido) {
     const esquema = {
-        id: Joi.number().integer().min(0),
         mail: Joi.string().email().required(),
     }
-    const { error } = Joi.validate(partida, esquema)
+    const { error } = Joi.validate(json_recibido, esquema)
     return error
 }
 

@@ -1,5 +1,6 @@
 const palabrasDAO = require('../../ServidorPalabrasRandom/data/daoFactory')
 const manejadorMail = require('../emails/mailHandler')
+const Joi = require('@hapi/joi')
 
 let partidas = []
 let ultimoId = 0
@@ -9,11 +10,14 @@ function getPartidaById(id) {
     return partidas.find(u => u.id == id)
 }
 
-async function agregarPartida(partida , email) {
-
+async function agregarPartida(email) {
+    let partida = {};
     objetoRecibido = await palabrasDAO.getPalabrasDAO().seleccionarPalabra();
 
-    partida.id = ultimoId + 1;    
+      if( await validarPalabraRecibida(objetoRecibido)){
+        throw { status: 500 , descripcion: 'No se pudo crear la partida por haber recibido una palabra con formato invalido desde la API' } 
+    }else{
+         partida.id = ultimoId + 1;    
     partida.palabra = objetoRecibido.palabra;
     partida.definicion = objetoRecibido.definicion;
     partida.palabraOculta = ocultarPalabra(partida.palabra);
@@ -21,10 +25,21 @@ async function agregarPartida(partida , email) {
     partida.vidas = 2;
     partida.letrasArriesgadas = [];
     partida.gano = false;
-    partidas.push(partida)
-    ultimoId++
+    partidas.push(partida);
+    ultimoId++; 
+      }
 
     return partida;
+    }
+
+function validarPalabraRecibida (palabraRecibida){
+    const esquema = {
+        palabra: Joi.string().required(),
+        definicion: Joi.string().required()
+    }
+    const {error} = Joi.validate(palabraRecibida, esquema)
+
+    return error;
 }
 
 function generarEstadoPartida(partida){ 

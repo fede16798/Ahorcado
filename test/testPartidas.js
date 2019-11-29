@@ -32,7 +32,7 @@ async function testPostConBody() {
             mail: 'oficiosmail@gmail.com',
         })
         validarPartida(partida)
-        console.log("POST partida para perder")
+        console.log("Crear nueva partida con ID 1 con mail valido (Esta partida se debera perder) (POST) OK.")
         result = true
     } catch (err) {
         console.log(err.message)
@@ -52,10 +52,10 @@ async function testPatchLetraConBody() {
         }, 1)
         
         validarPartida(partida)
-        console.log("PATCH de una letra a una partida para perder")
+        console.log("Arriesgar letra " + letraTemporal + ". en la partida 1. Esta partida debe perderse. OK. (PATCH)")
         result = true
     } catch (err) {
-        console.log(err.message)
+        console.log("El test fallo con un error inesperado: " + err.message)
     }
     return result
 }
@@ -168,14 +168,16 @@ async function testGetAPartidaInexsistente() {
     let result = false
 
     try {
-        await cli.buscarPorId(0)
-        console.log("get by inexisting id: error - se encontró una partida inexistente")
+        if(await cli.buscarPorId(3)){
+            console.log("Existe una partida con ID 3. OK, era el resultado esperado (GET)")
+            result = true;
+        }
     } catch (err) {
         if (err.statusCode == 404) {
-            console.log("get a id inexistente: ok (era el error esperado)")
-            result = true
+            console.log("Fallo al buscar una partida con ID 3, dado que no existe. OK, era el resultado esperado. (GET)")
+            result = true;
         } else {
-            console.log(err.message)
+            console.log("El test fallo con un error inesperado: " + err.message)
         }
     }
     return result
@@ -222,14 +224,14 @@ async function testPatchLetraConBodyParaGanar() {
             }, 2)
 
         validarPartida(partida)
-        console.log("PATCH letra a una partida para ganar. El post es en la posición " + num + ' de la palabra')
+        console.log("Arriesgar letra " + letraTemporal + ". en la partida 2 (PATCH)")
         result = true
     } catch (err) {
         if(err.statusCode == 400){
-            console.log('post a id terminado: ok (era el error esperado)');
+            console.log('POST a partida ya finalizada: ok (era el error esperado)');
             result = true;
         }
-        console.log(err.message)
+        // console.log(err.message)
     }
     return result
 }
@@ -241,7 +243,7 @@ async function main() {
     const tests = [
         testPostConBody,
         testGetAPartidaInexsistente,
-        testPatchLetraConBody,         
+        testPatchLetraConBody,       
         testArriesgarMismaLetra,
         testPatchZConBody,
         testPatchLetraConBodyAPartidaTerminada,
