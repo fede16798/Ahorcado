@@ -82,14 +82,12 @@ router.patch('/:id', (req, res) => {
        
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
-            partida.notificarResultado(false, partidaBuscada);
-            throw { status: 400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
+            throw { status: 403, descripcion: 'No se puede arrisgar letra, esta partida ya se encuentra ganada'}
         }
         partida.esPartidaGanada(partidaBuscada)
         if (partidaBuscada.gano){
             //true significa que gano
-            partida.notificarResultado(true,partidaBuscada);
-            throw { status: 400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
+            throw { status: 403 , descripcion: 'No se puede arrisgar letra, esta partida ya se encuentra perdida'}
         }
 
         if (partidaBuscada.letrasArriesgadas.includes(letra)){
