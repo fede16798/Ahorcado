@@ -35,24 +35,14 @@ router.post('/', async (req, res) => {
     console.log('POSTING: ' + req.url)
 
     const JSON_mail = req.body
-
     try {
         if (esJSONInvalido(JSON_mail)) {
             throw { status: 400, descripcion: 'El JSON recibido no posee un formato valido' }
         }
-
-        // const partidaBuscada = partida.getPartidaById(nuevaPartida.id);
-        // if (partidaBuscada) {
-        //     throw { status: 403, descripcion: 'ya existe un partida con ese id' }
-        // };
-
         nuevaPartida = await partida.agregarPartida(JSON_mail.mail);
-
-
         //Cuando crea la partida muestra informacion de la misma
         partidaAux = partida.generarEstadoPartida(nuevaPartida);
         res.status(201).json(partidaAux);
-
     } 
     catch (err) {
         console.log(err)
