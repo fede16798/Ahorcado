@@ -83,13 +83,13 @@ router.patch('/:id', (req, res) => {
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
             partida.notificarResultado(false, partidaBuscada);
-            throw { status:400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
+            throw { status: 400, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
         }
         partida.esPartidaGanada(partidaBuscada)
         if (partidaBuscada.gano){
             //true significa que gano
             partida.notificarResultado(true,partidaBuscada);
-            throw { status:400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
+            throw { status: 400 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
 
         if (partidaBuscada.letrasArriesgadas.includes(letra)){
@@ -99,7 +99,19 @@ router.patch('/:id', (req, res) => {
         partidaBuscada.letrasArriesgadas.push(letra);
         
         partidaBuscada.palabraOculta = partida.verificarLetrasEnPalabra(partidaBuscada, letra);
-        
+
+        if (partidaBuscada.vidas === 0) {
+            // false significa que perdio
+            partida.notificarResultado(false, partidaBuscada);
+            throw { status: 200, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
+        }
+        partida.esPartidaGanada(partidaBuscada)
+        if (partidaBuscada.gano){
+            //true significa que gano
+            partida.notificarResultado(true,partidaBuscada);
+            throw { status: 200 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
+        }
+
         partidaAux = partida.generarEstadoPartida(partidaBuscada)
 
         res.status(200).json(partidaAux)

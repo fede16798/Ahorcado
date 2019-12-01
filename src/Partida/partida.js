@@ -124,8 +124,6 @@ function verificarLetrasEnPalabra (partida, letra) {
     return palabraOculta;
 }
 
-
-
 module.exports = {
     getPartidaById,
     agregarPartida,

@@ -33,7 +33,8 @@ async function testPostConBody() {
             mail: 'oficiosmail@gmail.com',
         })
         console.log("Crear nueva partida con ID 1 con mail valido (Esta partida se debera perder) (POST) OK.")
-        console.log(partida)
+        console.log("Estado parcial de partida: ")
+        console.log(partida);
         result = true
     } catch (err) {
         if(err.statusCode == 500){
@@ -60,6 +61,8 @@ async function testPatchLetraConBody() {
         validarPartida(partida)
         console.log("Arriesgar letra " + letraTemporal + ". en la partida 1. Este intento pierde una vida. OK. (PATCH)")
         result = true
+        console.log("Estado parcial de partida: ")
+        console.log(partida);
     } catch (err) {
         if(err.statusCode == 404){
             console.log("No hay partida creada por un error en test anterior. resultado esperado. OK")
@@ -85,6 +88,8 @@ async function testPatchZConBody() {
         validarPartida(partida)
         console.log("Arriesga letra Z a partida 2. Este intento pierde la partida. OK. (PATCH)")
         result = true
+        console.log("Estado parcial de partida: ")
+        console.log(partida);
     } catch (err) {
         if(err.statusCode == 404){
             console.log("No puede arriesgar letra dado que no se creo partida en los test previos. OK")
@@ -259,7 +264,6 @@ async function testPostPartidaParaGanar(){
 
         //ARRIESGA LETRAS A LA PARTIDA GANADORA
 async function testPatchLetraConBodyParaGanar() {
-    console.log("Test 11");
     let num = numParaSaberQueLetraArriesgar;
     numParaSaberQueLetraArriesgar++;
     let result = false
@@ -271,7 +275,13 @@ async function testPatchLetraConBodyParaGanar() {
 
         validarPartida(partida)
         console.log("Arriesgar letra " + letraTemporal + ". en la partida 2 (PATCH)")
-        result = true
+
+        if(partida.vidas == 2){
+            result = true
+        }else{
+            console.log("Test fallido por arriesgar letra erronea. Este test solo debe arriesgar letras correctas")
+        }
+        
     } catch (err) {
         if(err.statusCode == 400){
             console.log('POST a partida ya finalizada: ok (era el error esperado)');
@@ -281,6 +291,17 @@ async function testPatchLetraConBodyParaGanar() {
     }
     return result
 }
+
+async function testPatchJuegaParaGanar (){
+    console.log("Test 11");
+    let num = 0;
+    let result = false
+    let letraTemporal = obtenerLetraAleatoriaGanadora(num);
+
+    
+
+}
+
 
 
 async function main() {
