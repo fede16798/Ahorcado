@@ -40,8 +40,7 @@ exports.mandarMail = function(resultado,partida) {
       id: partida.id
     }
   
-  }).then(() => console.log('email has been sent!')).catch(e => console.error(`No se envio el mail: ${e}`)); 
-
+  }).then(() => console.log('email has been sent!')).catch(e => console.error(`No se envio el mail: ${e}`));
     
 }
 

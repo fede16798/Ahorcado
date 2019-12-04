@@ -60,7 +60,7 @@ router.patch('/:id', (req, res) => {
         letra : req.body.letra
     }
     try {
-        const partidaBuscada = partida.getPartidaById(req.params.id)
+        const partidaBuscada =  partida.getPartidaById(req.params.id)
 
         if (!partidaBuscada) {
             throw { status: 404, descripcion: 'partida no encontrada' }
@@ -86,17 +86,17 @@ router.patch('/:id', (req, res) => {
        
         partidaBuscada.letrasArriesgadas.push(letra);
         
-        partidaBuscada.palabraOculta = partida.verificarLetrasEnPalabra(partidaBuscada, letra);
+        partidaBuscada.palabraOculta =  partida.verificarLetrasEnPalabra(partidaBuscada, letra);
 
         if (partidaBuscada.vidas === 0) {
             // false significa que perdio
-            partida.notificarResultado(false, partidaBuscada);
+             partida.notificarResultado(false, partidaBuscada);
             throw { status: 200, descripcion: 'Perdiste, te quedan '+ partidaBuscada.vidas + ' vidas. La palabra en juego era ' + partidaBuscada.palabra}
         }
         partida.esPartidaGanada(partidaBuscada)
         if (partidaBuscada.gano){
             //true significa que gano
-            partida.notificarResultado(true,partidaBuscada);
+             partida.notificarResultado(true,partidaBuscada);
             throw { status: 200 , descripcion: 'No puede seguir jugando, pero tranquile, fue porque ganaste, FELICITACIONES'}
         }
 

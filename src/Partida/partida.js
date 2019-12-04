@@ -80,7 +80,7 @@ function esPartidaGanada(partida){
     return partida.gano;
 }
 
-function notificarResultado(gano, partida){
+async function notificarResultado(gano, partida){
 manejadorMail.mandarMail(gano,partida)
 }
 
