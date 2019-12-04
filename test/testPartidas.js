@@ -137,7 +137,7 @@ async function testPatchLetraConBodyAPartidaTerminada() {
     console.log("Test 7");
     let result = false
     let letraAleatoria = obtenerLetraAleatoria();
-    console.log(`Arriesgando letra ya agregada: ` + `"` + letraAleatoria +`"`+ " a partida 1")
+    console.log(`Arriesgando letra a una partida ya finalizada (Partida 1): ` + `"` + letraAleatoria +`"`)
     try {
         let partida = await cli.arriesgarLetraEnPartidaPerdedora({
             letra: letraAleatoria,
@@ -176,7 +176,7 @@ async function testPatchLetraConBodyAPartidaTerminada() {
                 })
             } catch (err) {
                 if(err.statusCode == 400){
-                    console.log('El sistema no permite arriesgar ese caracter: OK (POST)');
+                    console.log('El sistema no permite arriesgar ese caracter: OK (PATCH)');
                     result = true;
                 } else if(err.statusCode == 404){
                     console.log("No puede arriesgar letra dado que no se creo la partida en los test previos. OK");
@@ -212,7 +212,7 @@ async function testPostSinBody() {
     return result
 }
 async function testPostConBodyIncorrecto() {
-    console.log("Test 11");
+    console.log("Test 9");
     console.log("Intentando crear una partida con un mail con formato invalido")
     let result = false
     try {
@@ -235,7 +235,7 @@ async function testPostConBodyIncorrecto() {
         //SE HACE UN GET A UNA PARTIDA QUE NO EXISTE
 async function testGetAPartidaInexsistente() {
     console.log("Test 2");
-    console.log("Buscando partida con ID 0")
+    console.log("Buscando partida con ID 0. Se espera que no lo encuentre")
     let result = false
 
     try {
@@ -257,7 +257,7 @@ async function testGetAPartidaInexsistente() {
 
         //SE HACE UN GET DE TODAS LAS PARTIDAS ACTIVAS
 async function testGetAll(){
-    console.log("Test 12");
+    console.log("Test 14");
     console.log("Intentando listar todas las partidas")
     result = false;
     try {
@@ -270,12 +270,13 @@ async function testGetAll(){
     } catch (err) {
         console.log(err.message)
     }
+    console.log("-----------------------------");
     return result
 }
 
         //SE CREA UNA PARTIDA PARA GANAR
 async function testPostPartidaParaGanar(){
-    console.log("Test 9");
+    console.log("Test 10");
     console.log("Creando una nueva partida. Esta se debera ganar, siempre que la palabra la provea la API de Test")
     let result = false
     try {
@@ -299,16 +300,17 @@ async function testPostPartidaParaGanar(){
     return result
 }
 
+
         //ARRIESGA LETRAS A LA PARTIDA GANADORA
 async function testPatchLetraConBodyParaGanar() {
-    console.log("Test 10")
+    console.log("Test 11")
     console.log("Arriesgara las 4 letras pertenecientes a la palabra MOCK, provista por la API de Test")
     console.log("Este test fallara si no se utiliza la API de prueba, y no representa un problema, necesariamente")
     let result = false
     let partida = {};
     for (let index = 0; index < 4; index++) {
         let letraTemporal = obtenerLetraAleatoriaGanadora(index);     
-        console.log("Test 10." + (index + 1) + " - Arriesga letra " + letraTemporal + ". en la partida 2 (PATCH)")   
+        console.log("Test 11." + (index + 1) + " - Arriesga letra " + letraTemporal + ". en la partida 2 (PATCH)")   
         try {
             partida = await cli.arriesgarLetraEnPartidaGanadora({
                 letra: letraTemporal,
@@ -339,6 +341,39 @@ async function testPatchLetraConBodyParaGanar() {
     return result
 }
 
+async function testVerificarPartidaGanada(){
+    console.log("Test 13");
+    console.log("Probando que la partida 2 esté finalizada y ganada.")
+    let result = false;
+    let partidaRecibida = await cli.buscarPorId(2);
+    console.log(partidaRecibida.gano)
+    if (partidaRecibida.gano){
+        console.log("La partida 2 esta ganada. OK")
+        result = true;
+    }else{
+        console.log("El test fallo dado que la partida 2 deberia estar ganada");
+    }
+
+    return result;
+}
+
+
+
+async function testVerificarPartidaPerdida(){
+    console.log("Test 7");
+    console.log("Probando que la partida 1 esté finalizada y perdida.")
+    let result = false;
+    let partidaRecibida = await cli.buscarPorId(1);
+    console.log(partidaRecibida.gano)
+    if (!partidaRecibida.gano){
+        console.log("La partida 1 esta perdida. OK")
+        result = true;
+    }else{
+        console.log("El test fallo dado que la partida 1 deberia estar perdida");
+    }
+
+    return result;
+}
 
 
 
@@ -351,12 +386,14 @@ async function main() {
         testPatchLetraConBody, //Hace un PATCH de una letra erronea      
         testPatchCaracterInvalidoConBody, //Arriesga caracter invalido 
         testArriesgarMismaLetra, //Arriesga misma letra que test anterior
-        testPatchZConBody, //Arriesga letra Z     
+        testPatchZConBody, //Arriesga letra Z
+        testVerificarPartidaPerdida,
         testPatchLetraConBodyAPartidaTerminada,        
-        testPostSinBody,              
-        testPostPartidaParaGanar,
+        testPostSinBody,
+        testPostConBodyIncorrecto,              
+        testPostPartidaParaGanar,        
         testPatchLetraConBodyParaGanar,
-        testPostConBodyIncorrecto,
+        testVerificarPartidaGanada,
         testGetAll,
     ]
 
